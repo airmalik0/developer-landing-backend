@@ -1,0 +1,50 @@
+{
+  "info": {
+    "name": "Developer Landing Backend",
+    "description": "Contact-form API with AI enrichment, rate limiting and metrics.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/api/health", "host": ["{{baseUrl}}"], "path": ["api", "health"] }
+      }
+    },
+    {
+      "name": "Metrics",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/api/metrics", "host": ["{{baseUrl}}"], "path": ["api", "metrics"] }
+      }
+    },
+    {
+      "name": "Submit contact (valid)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Малик Юлдашев\",\n  \"email\": \"malik@example.com\",\n  \"phone\": \"+998 90 123 45 67\",\n  \"comment\": \"Здравствуйте! Хотим обсудить разработку backend-сервиса с AI-интеграцией.\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/contact", "host": ["{{baseUrl}}"], "path": ["api", "contact"] }
+      }
+    },
+    {
+      "name": "Submit contact (validation error)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"A\",\n  \"email\": \"not-an-email\",\n  \"phone\": \"abc\",\n  \"comment\": \"hi\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/contact", "host": ["{{baseUrl}}"], "path": ["api", "contact"] }
+      }
+    }
+  ]
+}

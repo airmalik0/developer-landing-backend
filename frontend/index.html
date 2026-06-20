@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Malik Yuldashev — Backend Developer</title>
+    <meta
+      name="description"
+      content="Backend-разработчик. Проектирую API, AI-интеграции и надёжную инфраструктуру."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="aurora" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <span class="logo">MY<span class="dot">.</span></span>
+      <nav>
+        <a href="/docs">API&nbsp;Docs</a>
+        <a href="#contact">Контакт</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="kicker">Backend&nbsp;·&nbsp;API&nbsp;·&nbsp;AI-инфраструктура</p>
+        <h1>
+          Проектирую <em>backend</em>, который<br />не падает под нагрузкой.
+        </h1>
+        <p class="lede">
+          REST API, AI-интеграции, очереди, обработка ошибок и логирование —
+          от формы обратной связи до production-сервиса. Этот сайт сам является
+          демонстрацией: форма ниже проходит полный цикл
+          <code>валидация → rate-limit → AI → email → ответ</code>.
+        </p>
+        <div class="cta-row">
+          <a class="btn primary" href="#contact">Написать мне</a>
+          <a class="btn ghost" href="/docs">Открыть Swagger</a>
+        </div>
+
+        <ul class="stats">
+          <li><strong>REST</strong><span>FastAPI · OpenAPI</span></li>
+          <li><strong>AI</strong><span>Claude Haiku · fallback</span></li>
+          <li><strong>Infra</strong><span>rate-limit · logs · metrics</span></li>
+        </ul>
+      </section>
+
+      <section class="contact" id="contact">
+        <div class="card">
+          <h2>Связаться</h2>
+          <p class="card-sub">
+            Отправьте сообщение — AI на бэкенде проанализирует его и подготовит
+            черновик ответа в реальном времени.
+          </p>
+
+          <form id="contact-form" novalidate>
+            <div class="field">
+              <label for="name">Имя</label>
+              <input id="name" name="name" type="text" autocomplete="name" required />
+            </div>
+            <div class="grid-2">
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" autocomplete="email" required />
+              </div>
+              <div class="field">
+                <label for="phone">Телефон</label>
+                <input id="phone" name="phone" type="tel" placeholder="+998 90 123 45 67" required />
+              </div>
+            </div>
+            <div class="field">
+              <label for="comment">Сообщение</label>
+              <textarea id="comment" name="comment" rows="4" required></textarea>
+            </div>
+
+            <button class="btn primary full" type="submit" id="submit-btn">
+              Отправить
+            </button>
+          </form>
+
+          <div id="result" class="result" hidden></div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© <span id="year"></span> Malik Yuldashev</span>
+      <span class="muted">Backend test assignment · FastAPI + Anthropic + Resend</span>
+    </footer>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>

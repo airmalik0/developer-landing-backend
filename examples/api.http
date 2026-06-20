@@ -1,0 +1,39 @@
+# Developer Landing Backend — example requests
+# Use with VS Code "REST Client" or JetBrains HTTP Client.
+# Change @baseUrl to your deployment when testing the live API.
+
+@baseUrl = http://localhost:8000
+
+### Health check
+GET {{baseUrl}}/api/health
+
+### Aggregated metrics
+GET {{baseUrl}}/api/metrics
+
+### Submit a contact (valid) — full cycle: validation → rate-limit → AI → email → response
+POST {{baseUrl}}/api/contact
+Content-Type: application/json
+
+{
+  "name": "Малик Юлдашев",
+  "email": "malik@example.com",
+  "phone": "+998 90 123 45 67",
+  "comment": "Здравствуйте! Хотим обсудить разработку backend-сервиса с AI-интеграцией."
+}
+
+### Submit a contact (validation error — bad email & short comment → 422)
+POST {{baseUrl}}/api/contact
+Content-Type: application/json
+
+{
+  "name": "A",
+  "email": "not-an-email",
+  "phone": "abc",
+  "comment": "hi"
+}
+
+### Swagger UI
+GET {{baseUrl}}/docs
+
+### OpenAPI schema
+GET {{baseUrl}}/openapi.json

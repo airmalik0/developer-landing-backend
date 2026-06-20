@@ -1,0 +1,11 @@
+[project]
+name = "developer-landing-backend"
+version = "1.0.0"
+description = "Backend service for a developer's landing presentation (REST API + AI integration)."
+requires-python = ">=3.10"
+readme = "README.md"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q"
