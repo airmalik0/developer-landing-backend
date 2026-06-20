@@ -11,9 +11,14 @@ email-уведомлениями, Swagger-документацией, слоис
 
 | | |
 |---|---|
-| 🔗 Live API | _добавьте ссылку Vercel после деплоя_ |
-| 📚 Swagger | `<URL>/docs` |
-| 🧩 OpenAPI | `<URL>/openapi.json` |
+| 🔗 Live | https://developer-landing-backend-gamma.vercel.app |
+| 📚 Swagger | https://developer-landing-backend-gamma.vercel.app/docs |
+| 🧩 OpenAPI | https://developer-landing-backend-gamma.vercel.app/openapi.json |
+| 💻 GitHub | https://github.com/airmalik0/developer-landing-backend |
+
+> На проде ключи не заданы → AI работает в fallback, email пропускается, а
+> файловое хранилище на Vercel эфемерно. Чтобы включить «живые» AI + email +
+> персистентные метрики, задайте переменные окружения (см. раздел «Деплой»).
 
 ---
 
