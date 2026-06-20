@@ -38,6 +38,15 @@ class Settings(BaseSettings):
     rate_limit_max_requests: int = 5
     rate_limit_window_seconds: int = 60
 
+    # Tighter cap per email recipient so the confirmation copy cannot be abused
+    # as a spam/phishing relay against a single victim address.
+    email_recipient_max: int = 2
+    email_recipient_window_seconds: int = 600
+
+    # Trust proxy headers (X-Forwarded-For / X-Real-IP) for the client identity.
+    # Only safe behind a trusted edge that overwrites them — auto-on for Vercel.
+    trust_proxy_headers: bool = False
+
     # ── AI (Anthropic) ───────────────────────────────────────────────────────
     anthropic_api_key: str | None = None
     anthropic_model: str = "claude-haiku-4-5"
@@ -75,6 +84,15 @@ class Settings(BaseSettings):
     def is_serverless(self) -> bool:
         """True when running on Vercel (read-only FS except /tmp)."""
         return bool(os.environ.get("VERCEL"))
+
+    @property
+    def trust_proxy(self) -> bool:
+        """Whether proxy headers may be trusted for the client IP.
+
+        On Vercel a trusted edge always sits in front and overwrites these
+        headers, so they are authoritative; locally the socket peer is used.
+        """
+        return self.trust_proxy_headers or self.is_serverless
 
     @property
     def ai_configured(self) -> bool:

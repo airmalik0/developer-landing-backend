@@ -14,16 +14,26 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 
+from app.config import get_settings
 from app.core.logging import get_logger
 
 logger = get_logger("request")
 
 
 def get_client_ip(request: Request) -> str:
-    """Resolve the real client IP, honouring the proxy header set by Vercel."""
-    forwarded = request.headers.get("x-forwarded-for")
-    if forwarded:
-        return forwarded.split(",")[0].strip()
+    """Resolve the client IP used for rate limiting.
+
+    Proxy headers are trusted ONLY behind a trusted edge (``trust_proxy``) that
+    overwrites them — otherwise a client could spoof ``X-Forwarded-For`` and
+    bypass the rate limit. Without a trusted proxy we fall back to the TCP peer,
+    which the client cannot forge.
+    """
+    if get_settings().trust_proxy:
+        # Vercel sets these at the edge; they cannot be forged through it.
+        for header in ("x-vercel-forwarded-for", "x-real-ip", "x-forwarded-for"):
+            value = request.headers.get(header)
+            if value:
+                return value.split(",")[0].strip()
     return request.client.host if request.client else "unknown"
 
 

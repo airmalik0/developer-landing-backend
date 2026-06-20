@@ -25,7 +25,11 @@ class EmailService:
         self._settings = settings or get_settings()
 
     def send_notifications(
-        self, contact: ContactRequest, analysis: AIAnalysis
+        self,
+        contact: ContactRequest,
+        analysis: AIAnalysis,
+        *,
+        send_user_copy: bool = True,
     ) -> EmailStatus:
         if not self._settings.email_configured:
             logger.info(
@@ -41,12 +45,19 @@ class EmailService:
             html=self._owner_html(contact, analysis),
             who="owner",
         )
-        user = self._safe_send(
-            to=str(contact.email),
-            subject="Мы получили ваше обращение",
-            html=self._user_html(contact, analysis),
-            who="user",
-        )
+        # The confirmation copy goes to a user-supplied, unverified address; the
+        # caller gates it with a per-recipient limit so it can't be abused as a
+        # spam/phishing relay. The comment is HTML-escaped in the body.
+        if send_user_copy:
+            user = self._safe_send(
+                to=str(contact.email),
+                subject="Мы получили ваше обращение",
+                html=self._user_html(contact, analysis),
+                who="user",
+            )
+        else:
+            logger.info("user copy suppressed by recipient rate limit: %s", contact.email)
+            user = "skipped"
         return EmailStatus(owner=owner, user=user)
 
     # ── transport ────────────────────────────────────────────────────────────

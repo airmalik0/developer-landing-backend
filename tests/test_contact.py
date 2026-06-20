@@ -55,6 +55,24 @@ def test_rate_limit(make_client):
     assert "Retry-After" in blocked.headers
 
 
+def test_rate_limit_not_bypassed_by_spoofed_xff(make_client):
+    # trust_proxy is off locally → client identity is the socket peer, so a
+    # forged X-Forwarded-For must NOT reset the per-IP limit.
+    client = make_client(RATE_LIMIT_MAX_REQUESTS="2")
+    assert (
+        client.post("/api/contact", json=VALID_PAYLOAD, headers={"X-Forwarded-For": "1.1.1.1"}).status_code
+        == 201
+    )
+    assert (
+        client.post("/api/contact", json=VALID_PAYLOAD, headers={"X-Forwarded-For": "2.2.2.2"}).status_code
+        == 201
+    )
+    assert (
+        client.post("/api/contact", json=VALID_PAYLOAD, headers={"X-Forwarded-For": "3.3.3.3"}).status_code
+        == 429
+    )
+
+
 def test_health(make_client):
     client = make_client()
     res = client.get("/api/health")

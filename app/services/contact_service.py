@@ -51,8 +51,17 @@ class ContactService:
         # 2. AI enrichment (with built-in graceful fallback).
         analysis = self._ai.analyze(contact.name, contact.comment)
 
-        # 3. Email notifications (best-effort, reported back).
-        email_status = self._email.send_notifications(contact, analysis)
+        # 3. Email notifications (best-effort, reported back). The confirmation
+        #    copy is additionally capped per recipient so the form cannot be used
+        #    to flood an arbitrary address with mail.
+        recipient_ok = self._store.rate_limit(
+            f"email:{str(contact.email).lower()}",
+            self._settings.email_recipient_max,
+            self._settings.email_recipient_window_seconds,
+        ).allowed
+        email_status = self._email.send_notifications(
+            contact, analysis, send_user_copy=recipient_ok
+        )
 
         # 4. Persist the request + update statistics.
         record_id = uuid.uuid4().hex
